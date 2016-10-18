@@ -1,11 +1,14 @@
 package com.forkthecode.capstone.data.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by rohanarora on 19/10/16.
  */
 
 public class News {
 
+    @SerializedName("id")
     private long serverId;
 
     private String title;
@@ -14,8 +17,10 @@ public class News {
 
     private String url;
 
+    @SerializedName("cover_image_url")
     private String coverImageUrl;
 
+    @SerializedName("timestamp")
     private long timeStamp;
 
     public long getServerId() {

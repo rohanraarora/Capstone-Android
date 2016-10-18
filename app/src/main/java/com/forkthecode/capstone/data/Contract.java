@@ -28,7 +28,7 @@ public class Contract {
     public static final String PATH_EVENTS = "events";
 
 
-    public static final class NewsEntry {
+    public static final class NewsEntry implements BaseColumns  {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_NEWS).build();

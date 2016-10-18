@@ -5,9 +5,12 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+
+import com.forkthecode.capstone.data.models.News;
 
 /**
  * Created by rohanarora on 19/10/16.
@@ -154,6 +157,41 @@ public class CapstoneProvider extends ContentProvider {
         }
         return rowsUpdated;
     }
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case NEWS:
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        try {
+                            long _id = db.insertOrThrow(Contract.NewsEntry.TABLE_NAME, null, value);
+                            if (_id != -1) {
+                                returnCount++;
+                            }
+                        }
+                        catch (SQLiteConstraintException e){
+                            db.update(Contract.NewsEntry.TABLE_NAME,value,
+                                    Contract.NewsEntry.COLUMN_SERVER_ID + " = ?",
+                                    new String[]{value.getAsString(Contract.NewsEntry.COLUMN_SERVER_ID)});
+                        }
+
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            default:
+                return super.bulkInsert(uri, values);
+        }
+    }
+
     // You do not need to call this method. This is a method specifically to assist the testing
     // framework in running smoothly. You can read more at:
     // http://developer.android.com/reference/android/content/ContentProvider.html#shutdown()

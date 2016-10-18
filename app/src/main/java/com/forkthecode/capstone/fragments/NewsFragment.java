@@ -2,18 +2,26 @@ package com.forkthecode.capstone.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.forkthecode.capstone.R;
 import com.forkthecode.capstone.data.CapstoneProvider;
 import com.forkthecode.capstone.data.Contract;
+import com.forkthecode.capstone.rest.NewsCursorAdapter;
+import com.forkthecode.capstone.utilities.RecyclerViewItemClickListener;
 
 
 /**
@@ -21,7 +29,13 @@ import com.forkthecode.capstone.data.Contract;
  */
 public class NewsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    public static final int NEWS_CURSOR_LOADER_ID = 0;
 
+    private RecyclerView recyclerView;
+    private TextView emptyTextView;
+    private ProgressBar progressBar;
+    private NewsCursorAdapter mAdapter;
+    private Cursor mCursor;
 
     public NewsFragment() {
         // Required empty public constructor
@@ -31,30 +45,69 @@ public class NewsFragment extends Fragment implements LoaderManager.LoaderCallba
         return new NewsFragment();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_news, container, false);
+        View view =  inflater.inflate(R.layout.fragment_news, container, false);
+        recyclerView = (RecyclerView)view.findViewById(R.id.news_recycler_view);
+        emptyTextView = (TextView)view.findViewById(R.id.news_empty_text_view);
+        progressBar = (ProgressBar)view.findViewById(R.id.news_progress_bar);
+        recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(getContext(),
+                new RecyclerViewItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+
+                    }
+                }));
+        mAdapter = new NewsCursorAdapter(getContext(),null);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        getLoaderManager().initLoader(NEWS_CURSOR_LOADER_ID,null,this);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().restartLoader(NEWS_CURSOR_LOADER_ID,null,this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(), Contract.NewsEntry.CONTENT_URI,
-                new String[]{ Contract.NewsEntry.COLUMN_SERVER_ID, Contract.NewsEntry.COLUMN_TITLE,
-                        Contract.NewsEntry.COLUMN_CONTENT, Contract.NewsEntry.COLUMN_URL,
-                        Contract.NewsEntry.COLUMN_COVER_IMAGE_URL,
+                new String[]{Contract.NewsEntry._ID, Contract.NewsEntry.COLUMN_SERVER_ID,
+                        Contract.NewsEntry.COLUMN_TITLE, Contract.NewsEntry.COLUMN_CONTENT,
+                        Contract.NewsEntry.COLUMN_URL, Contract.NewsEntry.COLUMN_COVER_IMAGE_URL,
                         Contract.NewsEntry.COLUMN_TIMESTAMP}, null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Toast.makeText(getActivity(),"Load Finished",Toast.LENGTH_SHORT).show();
+        mAdapter.swapCursor(data);
+        mCursor = data;
+        progressBar.setVisibility(View.GONE);
+        if(data.getCount() == 0){
+            recyclerView.setVisibility(View.GONE);
+            emptyTextView.setVisibility(View.VISIBLE);
+        }
+        else {
+            emptyTextView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
 
     }
 }

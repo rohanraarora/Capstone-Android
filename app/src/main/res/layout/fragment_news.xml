@@ -4,11 +4,26 @@
     android:layout_height="match_parent"
     tools:context="com.forkthecode.capstone.fragments.NewsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/news_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
     <TextView
+        android:id="@+id/news_empty_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="News" />
+        android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/message_empty_news" />
+
+    <ProgressBar
+        android:id="@+id/news_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"/>
 
 </FrameLayout>

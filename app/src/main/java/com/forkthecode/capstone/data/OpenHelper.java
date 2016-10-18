@@ -24,7 +24,8 @@ public class OpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String SQL_CREATE_NEWS_TABLE = "CREATE TABLE " + NewsEntry.TABLE_NAME +
-                " (" + NewsEntry.COLUMN_SERVER_ID + " INTEGER PRIMARY UNIQUE, " +
+                " (" + NewsEntry._ID + " INTEGER PRIMARY KEY, " +
+                NewsEntry.COLUMN_SERVER_ID + " INTEGER UNIQUE, " +
                 NewsEntry.COLUMN_TITLE + " TEXT, " + NewsEntry.COLUMN_CONTENT + " TEXT, " +
                 NewsEntry.COLUMN_URL + " TEXT, " + NewsEntry.COLUMN_COVER_IMAGE_URL + " TEXT, " +
                 NewsEntry.COLUMN_TIMESTAMP + " TEXT)";
