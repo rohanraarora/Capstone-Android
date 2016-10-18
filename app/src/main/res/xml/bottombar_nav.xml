@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_events"
+        icon="@drawable/ic_event_black_24dp"
+        title="@string/tab_title_events" />
+    <tab
+        id="@+id/tab_news"
+        icon="@drawable/ic_newspaper_1"
+        title="@string/tab_title_news" />
+    <tab
+        id="@+id/tab_info"
+        icon="@drawable/ic_info_outline_black_24dp"
+        title="@string/tab_title_info" />
+</tabs>
