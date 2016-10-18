@@ -4,8 +4,10 @@ import android.support.annotation.IdRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.FrameLayout;
 
+import com.forkthecode.capstone.fragments.EventsFragment;
+import com.forkthecode.capstone.fragments.InfoFragment;
+import com.forkthecode.capstone.fragments.NewsFragment;
 import com.forkthecode.capstone.utilities.ActivityUtils;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
