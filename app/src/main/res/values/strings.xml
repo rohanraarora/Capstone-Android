@@ -46,4 +46,6 @@
     <string name="placeholder_event_venue">Venue</string>
     <string name="placeholder_event_description">Description</string>
     <string name="content_des_community_logo">Community Logo</string>
+    <string name="title_activity_event_detail">EventDetail</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

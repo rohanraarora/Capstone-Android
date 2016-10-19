@@ -1,6 +1,7 @@
 package com.forkthecode.capstone.ui.fragments;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.forkthecode.capstone.R;
+import com.forkthecode.capstone.data.models.Event;
+import com.forkthecode.capstone.rest.Constants;
 import com.forkthecode.capstone.rest.EventCursorAdapter;
+import com.forkthecode.capstone.ui.EventDetailActivity;
+import com.forkthecode.capstone.utilities.DBUtils;
 import com.forkthecode.capstone.utilities.RecyclerViewItemClickListener;
 
 import static com.forkthecode.capstone.data.Contract.*;
@@ -58,6 +63,10 @@ public class EventsFragment extends Fragment implements LoaderManager.LoaderCall
                     @Override
                     public void onItemClick(View v, int position) {
                         mCursor.moveToPosition(position);
+                        Event event = DBUtils.getEventFromCursor(mCursor);
+                        Intent detailIntent = new Intent(getContext(), EventDetailActivity.class);
+                        detailIntent.putExtra(Constants.IntentConstants.EVENT_KEY,event);
+                        startActivity(detailIntent);
 
                     }
                 }));

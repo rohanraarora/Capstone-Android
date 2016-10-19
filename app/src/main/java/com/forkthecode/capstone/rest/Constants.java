@@ -10,6 +10,7 @@ public class Constants {
 
         public static final String NEWS_KEY = "news";
 
+        public static final String EVENT_KEY = "event";
     }
 
 }

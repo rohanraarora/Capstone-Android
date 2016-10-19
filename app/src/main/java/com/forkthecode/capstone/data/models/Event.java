@@ -2,13 +2,14 @@ package com.forkthecode.capstone.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.security.PublicKey;
 
 /**
  * Created by rohanarora on 19/10/16.
  */
 
-public class Event {
+public class Event implements Serializable{
 
     @SerializedName("id")
     private long serverId;
