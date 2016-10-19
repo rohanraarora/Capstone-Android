@@ -7,7 +7,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="message_empty_news">No News.</string>
+    <string name="message_empty_list">No Items.</string>
     <string name="placeholder_title">Title</string>
     <string name="content_des_news_card">News Card</string>
     <string name="content_des_news_cover_image">News Cover Image</string>

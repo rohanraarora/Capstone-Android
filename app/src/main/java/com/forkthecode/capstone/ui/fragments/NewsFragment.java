@@ -57,10 +57,10 @@ public class NewsFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_news, container, false);
-        recyclerView = (RecyclerView)view.findViewById(R.id.news_recycler_view);
-        emptyTextView = (TextView)view.findViewById(R.id.news_empty_text_view);
-        progressBar = (ProgressBar)view.findViewById(R.id.news_progress_bar);
+        View view =  inflater.inflate(R.layout.fragment_home_list, container, false);
+        recyclerView = (RecyclerView)view.findViewById(R.id.home_list_recycler_view);
+        emptyTextView = (TextView)view.findViewById(R.id.home_list_empty_text_view);
+        progressBar = (ProgressBar)view.findViewById(R.id.home_list_progress_bar);
         recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(getContext(),
                 new RecyclerViewItemClickListener.OnItemClickListener() {
                     @Override

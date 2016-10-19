@@ -23,6 +23,7 @@ public class CapstoneProvider extends ContentProvider {
     private OpenHelper mOpenHelper;
 
     static final int NEWS = 100;
+    static final int EVENTS = 200;
 
 
 
@@ -33,6 +34,7 @@ public class CapstoneProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, Contract.PATH_NEWS, NEWS);
+        matcher.addURI(authority, Contract.PATH_EVENTS, EVENTS);
 //        matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
 //        matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
 //
@@ -40,10 +42,6 @@ public class CapstoneProvider extends ContentProvider {
         return matcher;
     }
 
-    /*
-        Students: We've coded this for you.  We just create a new WeatherDbHelper for later use
-        here.
-     */
     @Override
     public boolean onCreate() {
         mOpenHelper = new OpenHelper(getContext());
@@ -61,6 +59,8 @@ public class CapstoneProvider extends ContentProvider {
             // Student: Uncomment and fill out these two cases
             case NEWS:
                 return Contract.NewsEntry.CONTENT_TYPE;
+            case EVENTS:
+                return Contract.EventEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -74,14 +74,16 @@ public class CapstoneProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             // "weather/*/*"
-            case NEWS:
-            {
+            case NEWS: {
                 retCursor = mOpenHelper.getReadableDatabase().query(Contract.NewsEntry.TABLE_NAME,
                         projection,selection,selectionArgs,null,null,sortOrder);
                 break;
             }
-
-
+            case EVENTS: {
+                retCursor = mOpenHelper.getReadableDatabase().query(Contract.EventEntry.TABLE_NAME,
+                        projection,selection,selectionArgs,null,null,sortOrder);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -105,6 +107,14 @@ public class CapstoneProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
+            case EVENTS: {
+                long _id = db.insert(Contract.EventEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = Contract.EventEntry.buildEventUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -123,6 +133,10 @@ public class CapstoneProvider extends ContentProvider {
             case NEWS:
                 rowsDeleted = db.delete(
                         Contract.NewsEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case EVENTS:
+                rowsDeleted = db.delete(
+                        Contract.EventEntry.TABLE_NAME, selection, selectionArgs);
                 break;
 
             default:
@@ -147,6 +161,10 @@ public class CapstoneProvider extends ContentProvider {
         switch (match) {
             case NEWS:
                 rowsUpdated = db.update(Contract.NewsEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case EVENTS:
+                rowsUpdated = db.update(Contract.EventEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             default:
@@ -187,6 +205,30 @@ public class CapstoneProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
+            case EVENTS:
+                db.beginTransaction();
+                int returnEventCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        try {
+                            long _id = db.insertOrThrow(Contract.EventEntry.TABLE_NAME, null, value);
+                            if (_id != -1) {
+                                returnEventCount++;
+                            }
+                        }
+                        catch (SQLiteConstraintException e){
+                            db.update(Contract.EventEntry.TABLE_NAME,value,
+                                    Contract.NewsEntry.COLUMN_SERVER_ID + " = ?",
+                                    new String[]{value.getAsString(Contract.EventEntry.COLUMN_SERVER_ID)});
+                        }
+
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnEventCount;
             default:
                 return super.bulkInsert(uri, values);
         }

@@ -150,7 +150,18 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
             @Override
             public void onSuccessResponse(EventsResponse response) {
                 List<Event> events = response.getData().getEvents();
-                Toast.makeText(HomeActivity.this,"Events success",Toast.LENGTH_SHORT).show();
+                Vector<ContentValues> cVVector = new Vector<ContentValues>(events.size());
+                for(Event event:events){
+                    ContentValues contentValues = DBUtils.cvFromEvent(event);
+                    cVVector.add(contentValues);
+                }
+                int inserted = 0;
+                // add to database
+                if ( cVVector.size() > 0 ) {
+                    ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                    cVVector.toArray(cvArray);
+                    getContentResolver().bulkInsert(Contract.EventEntry.CONTENT_URI, cvArray);
+                }
 
             }
 
