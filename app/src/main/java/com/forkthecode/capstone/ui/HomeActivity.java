@@ -70,7 +70,7 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
     }
 
     private void selectInfoTab() {
-        actionBar.setTitle(getString(R.string.tab_title_info));
+        actionBar.setTitle(getString(R.string.community_name));
         InfoFragment fragment;
         if(!fragmentHashMap.containsKey(R.id.tab_info)) {
             fragment = InfoFragment.newInstance();
