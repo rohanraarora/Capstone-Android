@@ -39,4 +39,11 @@
     <string name="placeholder_news_date">Date</string>
     <string name="error_no_browser">Please install a browser to view this web page.</string>
     <string name="community_name">GDG New Delhi</string>
+    <string name="content_des_event_card">Event Card</string>
+    <string name="content_des_event_cover_image">Event Cover Image</string>
+    <string name="placeholder_past_event_status">PAST</string>
+    <string name="placeholder_event_duration">From - To</string>
+    <string name="placeholder_event_venue">Venue</string>
+    <string name="placeholder_event_description">Description</string>
+    <string name="content_des_community_logo">Community Logo</string>
 </resources>
