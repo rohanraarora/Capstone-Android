@@ -1,6 +1,7 @@
 package com.forkthecode.capstone.network;
 
 
+import com.forkthecode.capstone.network.responses.EventsResponse;
 import com.forkthecode.capstone.network.responses.NewsResponse;
 
 import retrofit2.Call;
@@ -23,4 +24,7 @@ public interface ApiService {
 
     @GET(URLConstant.GET_NEWS)
     Call<NewsResponse> getNews();
+
+    @GET(URLConstant.GET_EVENTS)
+    Call<EventsResponse> getEvents();
 }

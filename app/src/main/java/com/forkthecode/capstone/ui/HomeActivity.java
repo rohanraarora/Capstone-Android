@@ -10,7 +10,9 @@ import android.widget.Toast;
 
 import com.forkthecode.capstone.R;
 import com.forkthecode.capstone.data.Contract;
+import com.forkthecode.capstone.data.models.Event;
 import com.forkthecode.capstone.data.models.News;
+import com.forkthecode.capstone.network.responses.EventsResponse;
 import com.forkthecode.capstone.ui.fragments.EventsFragment;
 import com.forkthecode.capstone.ui.fragments.InfoFragment;
 import com.forkthecode.capstone.ui.fragments.NewsFragment;
@@ -52,6 +54,7 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
         mBottomBar.setOnTabSelectListener(this);
 
         updateNews();
+        updateEvents();
     }
 
     @Override
@@ -136,6 +139,25 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
             }
 
 
+        };
+        manager.execute(call,listener);
+    }
+
+    private void updateEvents(){
+        Call<EventsResponse> call = ApiClient.apiService().getEvents();
+        NetworkDataManager<EventsResponse> manager = new NetworkDataManager<>();
+        NetworkDataManager.NetworkResponseListener listener = manager.new NetworkResponseListener() {
+            @Override
+            public void onSuccessResponse(EventsResponse response) {
+                List<Event> events = response.getData().getEvents();
+                Toast.makeText(HomeActivity.this,"Events success",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(int code, String message) {
+                Toast.makeText(HomeActivity.this,"Events Error: " + message,Toast.LENGTH_SHORT).show();
+            }
         };
         manager.execute(call,listener);
     }
