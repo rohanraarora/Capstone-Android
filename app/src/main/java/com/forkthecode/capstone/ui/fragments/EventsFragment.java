@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.forkthecode.capstone.R;
+import com.forkthecode.capstone.rest.EventCursorAdapter;
 import com.forkthecode.capstone.utilities.RecyclerViewItemClickListener;
 
 import static com.forkthecode.capstone.data.Contract.*;
@@ -31,6 +32,7 @@ public class EventsFragment extends Fragment implements LoaderManager.LoaderCall
     private RecyclerView recyclerView;
     private TextView emptyTextView;
     private ProgressBar progressBar;
+    private EventCursorAdapter mAdapter;
     private Cursor mCursor;
 
 
@@ -59,8 +61,8 @@ public class EventsFragment extends Fragment implements LoaderManager.LoaderCall
 
                     }
                 }));
-        //mAdapter = new NewsCursorAdapter(getContext(),null);
-        //recyclerView.setAdapter(mAdapter);
+        mAdapter = new EventCursorAdapter(getContext(),null);
+        recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -88,7 +90,7 @@ public class EventsFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //mAdapter.swapCursor(data);
+        mAdapter.swapCursor(data);
         mCursor = data;
         progressBar.setVisibility(View.GONE);
         if(data.getCount() == 0){
@@ -103,7 +105,6 @@ public class EventsFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        //mAdapter.swapCursor(null);
-
+        mAdapter.swapCursor(null);
     }
 }

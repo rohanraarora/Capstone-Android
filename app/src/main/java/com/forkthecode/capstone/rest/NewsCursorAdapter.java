@@ -14,6 +14,7 @@ import com.forkthecode.capstone.R;
 import com.forkthecode.capstone.data.Contract;
 import com.forkthecode.capstone.network.URLConstant;
 import com.forkthecode.capstone.utilities.CursorRecyclerViewAdapter;
+import com.forkthecode.capstone.utilities.Util;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -33,9 +34,8 @@ public class NewsCursorAdapter extends CursorRecyclerViewAdapter<NewsCursorAdapt
     public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
         viewHolder.title.setText(cursor.getString(cursor.getColumnIndex(Contract.NewsEntry.COLUMN_TITLE)));
         viewHolder.content.setText(cursor.getString(cursor.getColumnIndex(Contract.NewsEntry.COLUMN_CONTENT)));
-        String imageUrl = URLConstant.BASE_URL + cursor.getString(
-                cursor.getColumnIndex(Contract.NewsEntry.COLUMN_COVER_IMAGE_URL));
-        Picasso.with(mContext).load(imageUrl).into(viewHolder.image);
+        String imageUrl = cursor.getString(cursor.getColumnIndex(Contract.NewsEntry.COLUMN_COVER_IMAGE_URL));
+        Picasso.with(mContext).load(Util.getCompleteImageUrl(imageUrl)).into(viewHolder.image);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.forkthecode.capstone.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.security.PublicKey;
+
 /**
  * Created by rohanarora on 19/10/16.
  */
@@ -131,7 +133,9 @@ public class Event {
         this.coverImageURL = coverImageURL;
     }
 
-
+    public boolean isPastEvent(){
+        return System.currentTimeMillis() >= toTimestamp * 1000L;
+    }
 
 
 }

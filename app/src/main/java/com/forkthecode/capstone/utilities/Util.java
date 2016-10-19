@@ -2,6 +2,8 @@ package com.forkthecode.capstone.utilities;
 
 import android.support.annotation.Nullable;
 
+import com.forkthecode.capstone.network.URLConstant;
+
 public class Util {
 
     public static final String LOG_TAG = "Rohan Log";
@@ -36,4 +38,7 @@ public class Util {
         return reference;
     }
 
+    public static String getCompleteImageUrl(String imageURL) {
+        return URLConstant.BASE_URL + imageURL;
+    }
 }

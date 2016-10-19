@@ -56,4 +56,21 @@ public class DBUtils {
         contentValues.put(Contract.EventEntry.COLUMN_COVER_IMAGE_LINK,event.getCoverImageURL());
         return contentValues;
     }
+
+    public static Event getEventFromCursor(@NonNull Cursor cursor){
+        Util.checkNotNull(cursor);
+        Event event = new Event();
+        event.setServerId(cursor.getLong(cursor.getColumnIndex(Contract.EventEntry.COLUMN_SERVER_ID)));
+        event.setTitle(cursor.getString(cursor.getColumnIndex(Contract.EventEntry.COLUMN_TITLE)));
+        event.setDescription(cursor.getString(cursor.getColumnIndex(Contract.EventEntry.COLUMN_DESCRIPTION)));
+        event.setFromTimestamp(cursor.getLong(cursor.getColumnIndex(Contract.EventEntry.COLUMN_FROM_TIMESTAMP)));
+        event.setToTimestamp(cursor.getLong(cursor.getColumnIndex(Contract.EventEntry.COLUMN_TO_TIMESTAMP)));
+        event.setTicketPrice(cursor.getInt(cursor.getColumnIndex(Contract.EventEntry.COLUMN_TICKET_PRICE)));
+        event.setTitcketURL(cursor.getString(cursor.getColumnIndex(Contract.EventEntry.COLUMN_TICKET_URL)));
+        event.setVenueTitle(cursor.getString(cursor.getColumnIndex(Contract.EventEntry.COLUMN_VENUE_TITLE)));
+        event.setVenueLat(cursor.getDouble(cursor.getColumnIndex(Contract.EventEntry.COLUMN_VENUE_LAT)));
+        event.setVenueLong(cursor.getDouble(cursor.getColumnIndex(Contract.EventEntry.COLUMN_VENUE_LONG)));
+        event.setCoverImageURL(cursor.getString(cursor.getColumnIndex(Contract.EventEntry.COLUMN_COVER_IMAGE_LINK)));
+        return event;
+    }
 }

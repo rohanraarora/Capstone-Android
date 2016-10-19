@@ -18,6 +18,7 @@ import com.forkthecode.capstone.R;
 import com.forkthecode.capstone.data.models.News;
 import com.forkthecode.capstone.network.URLConstant;
 import com.forkthecode.capstone.rest.Constants;
+import com.forkthecode.capstone.utilities.Util;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -60,7 +61,7 @@ public class NewsDetailActivity extends AppCompatActivity implements View.OnClic
         String timestampString = dateFormat.format(new Date(news.getTimeStamp()*1000L));
         timestampTextView.setText(timestampString);
         ImageView coverImageView = (ImageView)findViewById(R.id.news_detail_image_view);
-        Picasso.with(this).load(URLConstant.BASE_URL + news.getCoverImageUrl()).into(coverImageView);
+        Picasso.with(this).load(Util.getCompleteImageUrl(news.getCoverImageUrl())).into(coverImageView);
 
     }
 
