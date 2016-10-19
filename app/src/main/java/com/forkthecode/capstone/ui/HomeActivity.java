@@ -1,26 +1,24 @@
-package com.forkthecode.capstone;
+package com.forkthecode.capstone.ui;
 
 import android.content.ContentValues;
-import android.content.Intent;
-import android.net.Network;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.forkthecode.capstone.R;
 import com.forkthecode.capstone.data.Contract;
 import com.forkthecode.capstone.data.models.News;
-import com.forkthecode.capstone.fragments.EventsFragment;
-import com.forkthecode.capstone.fragments.InfoFragment;
-import com.forkthecode.capstone.fragments.NewsFragment;
+import com.forkthecode.capstone.ui.fragments.EventsFragment;
+import com.forkthecode.capstone.ui.fragments.InfoFragment;
+import com.forkthecode.capstone.ui.fragments.NewsFragment;
 import com.forkthecode.capstone.network.ApiClient;
 import com.forkthecode.capstone.network.NetworkDataManager;
-import com.forkthecode.capstone.network.responses.ApiResponse;
 import com.forkthecode.capstone.network.responses.NewsResponse;
 import com.forkthecode.capstone.utilities.ActivityUtils;
+import com.forkthecode.capstone.utilities.DBUtils;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -33,7 +31,7 @@ import retrofit2.Call;
 public class HomeActivity extends AppCompatActivity implements OnTabSelectListener {
 
 
-    ActionBar actionBar;
+    private ActionBar actionBar;
 
     private static final int TAB_ID_EVENTS = R.id.tab_events;
     private static final int TAB_ID_NEWS = R.id.tab_news;
@@ -41,10 +39,7 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
 
     private static final int CONTAINER_ID = R.id.home_container;
 
-    HashMap<Integer,Fragment> fragmentHashMap = new HashMap<>();
-    ;
-
-
+    private HashMap<Integer,Fragment> fragmentHashMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +50,6 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
 
         BottomBar mBottomBar = (BottomBar) this.findViewById(R.id.home_bottom_bar);
         mBottomBar.setOnTabSelectListener(this);
-
 
         updateNews();
     }
@@ -124,15 +118,7 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
                 List<News> newsList = response.getData().getNews();
                 Vector<ContentValues> cVVector = new Vector<ContentValues>(newsList.size());
                 for(News news:newsList){
-                    ContentValues newsValues = new ContentValues();
-
-                    newsValues.put(Contract.NewsEntry.COLUMN_SERVER_ID, news.getServerId());
-                    newsValues.put(Contract.NewsEntry.COLUMN_TITLE, news.getTitle());
-                    newsValues.put(Contract.NewsEntry.COLUMN_TIMESTAMP,news.getTimeStamp());
-                    newsValues.put(Contract.NewsEntry.COLUMN_CONTENT,news.getContent());
-                    newsValues.put(Contract.NewsEntry.COLUMN_COVER_IMAGE_URL,news.getCoverImageUrl());
-                    newsValues.put(Contract.NewsEntry.COLUMN_URL,news.getUrl());
-
+                    ContentValues newsValues = DBUtils.cvFromNews(news);
                     cVVector.add(newsValues);
                 }
                 int inserted = 0;
@@ -152,6 +138,5 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
 
         };
         manager.execute(call,listener);
-
     }
 }

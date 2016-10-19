@@ -1,5 +1,7 @@
 package com.forkthecode.capstone.network;
 
+import android.util.Log;
+
 import com.forkthecode.capstone.network.responses.ApiResponse;
 import com.google.gson.JsonSyntaxException;
 
@@ -13,6 +15,8 @@ import retrofit2.Response;
  *
  */
 public class NetworkDataManager<T extends ApiResponse> {
+
+    private static final String LOG_TAG = "NetworkDataManager_Log";
 
     public static final int SUCCESS_RESPONSE_CODE = 200;
 
@@ -52,8 +56,10 @@ public class NetworkDataManager<T extends ApiResponse> {
             public void onFailure(Call<T> call, Throwable t) {
                 if (t instanceof JsonSyntaxException) {
                     listener.onFailure(INTERNAL_SERVER_ERROR_CODE, JSON_SYNTAX_ERROR);
+                    Log.d(LOG_TAG,t.getMessage());
                 } else {
                     listener.onFailure(NETWORK_FAILURE_ERROR_CODE, NETWORK_FAILURE_ERROR_MESSAGE);
+                    Log.d(LOG_TAG,t.getMessage());
                 }
             }
         });

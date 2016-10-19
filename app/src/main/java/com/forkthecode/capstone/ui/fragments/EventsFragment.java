@@ -1,4 +1,4 @@
-package com.forkthecode.capstone.fragments;
+package com.forkthecode.capstone.ui.fragments;
 
 
 import android.os.Bundle;

@@ -2,11 +2,13 @@ package com.forkthecode.capstone.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by rohanarora on 19/10/16.
  */
 
-public class News {
+public class News implements Serializable {
 
     @SerializedName("id")
     private long serverId;

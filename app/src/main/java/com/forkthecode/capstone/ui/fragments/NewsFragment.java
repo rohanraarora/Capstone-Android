@@ -1,5 +1,6 @@
-package com.forkthecode.capstone.fragments;
+package com.forkthecode.capstone.ui.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,18 +10,19 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.forkthecode.capstone.R;
-import com.forkthecode.capstone.data.CapstoneProvider;
 import com.forkthecode.capstone.data.Contract;
+import com.forkthecode.capstone.data.models.News;
+import com.forkthecode.capstone.rest.Constants;
 import com.forkthecode.capstone.rest.NewsCursorAdapter;
+import com.forkthecode.capstone.ui.NewsDetailActivity;
+import com.forkthecode.capstone.utilities.DBUtils;
 import com.forkthecode.capstone.utilities.RecyclerViewItemClickListener;
 
 
@@ -63,7 +65,11 @@ public class NewsFragment extends Fragment implements LoaderManager.LoaderCallba
                 new RecyclerViewItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int position) {
-
+                        mCursor.moveToPosition(position);
+                        News news = DBUtils.getNewsFromCursor(mCursor);
+                        Intent newsDetailIntent = new Intent(getContext(), NewsDetailActivity.class);
+                        newsDetailIntent.putExtra(Constants.IntentConstants.NEWS_KEY,news);
+                        startActivity(newsDetailIntent);
                     }
                 }));
         mAdapter = new NewsCursorAdapter(getContext(),null);
