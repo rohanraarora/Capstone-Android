@@ -1,6 +1,9 @@
 package com.forkthecode.capstone.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -22,6 +25,8 @@ import com.forkthecode.capstone.network.NetworkDataManager;
 import com.forkthecode.capstone.network.responses.NewsResponse;
 import com.forkthecode.capstone.utilities.ActivityUtils;
 import com.forkthecode.capstone.utilities.DBUtils;
+import com.forkthecode.capstone.widget.CapstoneWidget;
+import com.forkthecode.capstone.widget.CapstoneWidgetListProvider;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -172,7 +177,7 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
                     cVVector.toArray(cvArray);
                     getContentResolver().bulkInsert(Contract.EventEntry.CONTENT_URI, cvArray);
                 }
-
+                updateWidget();
             }
 
             @Override
@@ -181,5 +186,14 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
             }
         };
         manager.execute(call,listener);
+    }
+
+    private void updateWidget() {
+        ComponentName name = new ComponentName(this, CapstoneWidget.class);
+        int [] ids = AppWidgetManager.getInstance(this).getAppWidgetIds(name);
+        Intent intent = new Intent(this,CapstoneWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+        sendBroadcast(intent);
     }
 }

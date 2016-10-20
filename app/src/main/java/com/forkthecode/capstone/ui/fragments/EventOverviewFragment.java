@@ -98,10 +98,10 @@ public class EventOverviewFragment extends Fragment {
     private void onGetTicketsClicked(View view) {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW);
         browserIntent.setData(Uri.parse(mEvent.getTitcketURL()));
-        if(browserIntent.resolveActivity(getContext().getPackageManager())!=null){
+        try{
             startActivity(browserIntent);
         }
-        else{
+        catch (ActivityNotFoundException e){
             Snackbar.make(view, R.string.error_no_browser,Snackbar.LENGTH_SHORT).show();
         }
     }

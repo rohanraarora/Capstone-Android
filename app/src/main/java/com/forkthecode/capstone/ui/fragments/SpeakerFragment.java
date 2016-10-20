@@ -1,10 +1,13 @@
 package com.forkthecode.capstone.ui.fragments;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import com.forkthecode.capstone.R;
 import com.forkthecode.capstone.data.Contract;
 import com.forkthecode.capstone.data.models.Event;
+import com.forkthecode.capstone.data.models.Speaker;
 import com.forkthecode.capstone.rest.Constants;
 import com.forkthecode.capstone.rest.EventCursorAdapter;
 import com.forkthecode.capstone.rest.SpeakerCursorAdapter;
@@ -65,7 +69,15 @@ public class SpeakerFragment extends Fragment implements LoaderManager.LoaderCal
                     @Override
                     public void onItemClick(View v, int position) {
                         mCursor.moveToPosition(position);
-
+                        Speaker speaker = DBUtils.getSpeakerFromCursor(mCursor);
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                        browserIntent.setData(Uri.parse(speaker.getProfileURL()));
+                        try{
+                            startActivity(browserIntent);
+                        }
+                        catch (ActivityNotFoundException e){
+                            Snackbar.make(recyclerView, R.string.error_no_browser,Snackbar.LENGTH_SHORT).show();
+                        }
 
                     }
                 }));

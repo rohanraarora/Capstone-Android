@@ -95,6 +95,7 @@ public class EventsFragment extends Fragment implements LoaderManager.LoaderCall
                         EventEntry.COLUMN_VENUE_TITLE, EventEntry.COLUMN_COVER_IMAGE_LINK,
                         EventEntry.COLUMN_VENUE_LONG, EventEntry.COLUMN_VENUE_LAT},
                 null, null, null);
+
     }
 
     @Override
