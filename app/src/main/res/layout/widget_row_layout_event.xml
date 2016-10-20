@@ -6,7 +6,7 @@
     android:id="@+id/widget_event_row">
 
     <TextView
-        android:text="Title"
+        android:text="@string/placeholder_title"
         android:id="@+id/widget_event_row_title"
         android:layout_width="match_parent"
         android:textSize="@dimen/text_large"
@@ -19,7 +19,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:text="Date"
+            android:text="@string/placeholder_event_duration"
             android:id="@+id/widget_event_row_start_datetime"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="Venue"
+            android:text="@string/placeholder_event_venue"
             android:id="@+id/widget_event_row_venue"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/widget_event_row_description"
-        android:text="Description"
+        android:text="@string/placeholder_event_description"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

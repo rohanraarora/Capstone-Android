@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by rohanarora on 19/10/16.
+ *
  */
 
 public class News implements Serializable {

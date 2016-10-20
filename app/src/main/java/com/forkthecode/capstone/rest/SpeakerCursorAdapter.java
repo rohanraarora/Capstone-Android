@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.forkthecode.capstone.R;
-import com.forkthecode.capstone.data.Contract;
 import com.forkthecode.capstone.data.models.Speaker;
 import com.forkthecode.capstone.utilities.CursorRecyclerViewAdapter;
 import com.forkthecode.capstone.utilities.DBUtils;
@@ -19,11 +18,12 @@ import com.squareup.picasso.Picasso;
 
 /**
  * Created by rohanarora on 20/10/16.
+ *
  */
 
 public class SpeakerCursorAdapter extends CursorRecyclerViewAdapter<SpeakerCursorAdapter.ViewHolder> {
 
-    Context mContext;
+    private Context mContext;
 
     public SpeakerCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor);
@@ -48,11 +48,11 @@ public class SpeakerCursorAdapter extends CursorRecyclerViewAdapter<SpeakerCurso
 
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView name;
-        public final TextView bio;
-        public final ImageView image;
-        public ViewHolder(View itemView){
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        final TextView name;
+        final TextView bio;
+        final ImageView image;
+        ViewHolder(View itemView){
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.speaker_name);
             bio = (TextView) itemView.findViewById(R.id.speaker_bio);

@@ -7,10 +7,8 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-
-import com.forkthecode.capstone.data.models.News;
+import android.support.annotation.NonNull;
 
 /**
  * Created by rohanarora on 19/10/16.
@@ -19,7 +17,6 @@ import com.forkthecode.capstone.data.models.News;
 
 public class CapstoneProvider extends ContentProvider {
 
-    // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private OpenHelper mOpenHelper;
 
@@ -32,14 +29,9 @@ public class CapstoneProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = Contract.CONTENT_AUTHORITY;
 
-        // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, Contract.PATH_NEWS, NEWS);
         matcher.addURI(authority, Contract.PATH_EVENTS, EVENTS);
         matcher.addURI(authority, Contract.PATH_SPEAKERS, SPEAKERS);
-//        matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
-//        matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
-//
-//        matcher.addURI(authority, WeatherContract.PATH_LOCATION, LOCATION);
         return matcher;
     }
 
@@ -51,13 +43,11 @@ public class CapstoneProvider extends ContentProvider {
 
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
 
-        // Use the Uri Matcher to determine what kind of URI this is.
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
-            // Student: Uncomment and fill out these two cases
             case NEWS:
                 return Contract.NewsEntry.CONTENT_TYPE;
             case EVENTS:
@@ -70,13 +60,12 @@ public class CapstoneProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
-        // Here's the switch statement that, given a URI, will determine what kind of request it is,
-        // and query the database accordingly.
+
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            // "weather/*/*"
+
             case NEWS: {
                 retCursor = mOpenHelper.getReadableDatabase().query(Contract.NewsEntry.TABLE_NAME,
                         projection,selection,selectionArgs,null,null,sortOrder);
@@ -101,7 +90,7 @@ public class CapstoneProvider extends ContentProvider {
 
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         Uri returnUri;

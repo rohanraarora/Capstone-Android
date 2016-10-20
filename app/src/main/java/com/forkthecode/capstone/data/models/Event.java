@@ -3,11 +3,11 @@ package com.forkthecode.capstone.data.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.security.PublicKey;
 import java.util.ArrayList;
 
 /**
  * Created by rohanarora on 19/10/16.
+ *
  */
 
 public class Event implements Serializable{

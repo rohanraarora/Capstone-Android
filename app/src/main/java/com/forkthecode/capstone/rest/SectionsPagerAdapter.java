@@ -2,6 +2,7 @@ package com.forkthecode.capstone.rest;
 
 /**
  * Created by rohanarora on 20/10/16.
+ *
  */
 
 
@@ -20,9 +21,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final int OVERVIEW_POSITION = 0;
     private static final int SPEAKER_POSITION = 1;
 
-    Event mEvent;
+    private Event mEvent;
 
-    HashMap<Integer,Fragment> fragmentHashMap = new HashMap<>();
+    private HashMap<Integer,Fragment> fragmentHashMap = new HashMap<>();
 
     public SectionsPagerAdapter(FragmentManager fm, Event event) {
         super(fm);

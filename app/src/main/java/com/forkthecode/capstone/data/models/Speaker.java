@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by rohanarora on 20/10/16.
+ *
  */
 
 public class Speaker implements Serializable{

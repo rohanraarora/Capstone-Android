@@ -4,13 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.forkthecode.capstone.data.Contract.NewsEntry;
-import com.forkthecode.capstone.data.models.Event;
-
 import static com.forkthecode.capstone.data.Contract.*;
 
 /**
  * Created by rohanarora on 19/10/16.
+ *
  */
 
 public class OpenHelper extends SQLiteOpenHelper {
