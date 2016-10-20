@@ -19,12 +19,15 @@ import com.forkthecode.capstone.data.models.News;
 import com.forkthecode.capstone.network.URLConstant;
 import com.forkthecode.capstone.rest.Constants;
 import com.forkthecode.capstone.utilities.Util;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class NewsDetailActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     ActionBar mActionBar;
     News news;
@@ -35,6 +38,8 @@ public class NewsDetailActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_news_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.news_detail_toolbar);
         setSupportActionBar(toolbar);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -68,6 +73,13 @@ public class NewsDetailActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         if(news!=null && news.getUrl()!=null){
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(news.getServerId()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, news.getTitle());
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "news");
+            mFirebaseAnalytics.logEvent("Open News In Browser", bundle);
+
             Intent browserIntent = new Intent(Intent.ACTION_VIEW);
             browserIntent.setData(Uri.parse(news.getUrl()));
             try {

@@ -27,6 +27,7 @@ import com.forkthecode.capstone.utilities.ActivityUtils;
 import com.forkthecode.capstone.utilities.DBUtils;
 import com.forkthecode.capstone.widget.CapstoneWidget;
 import com.forkthecode.capstone.widget.CapstoneWidgetListProvider;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -39,6 +40,8 @@ import retrofit2.Call;
 
 public class HomeActivity extends AppCompatActivity implements OnTabSelectListener {
 
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private ActionBar actionBar;
 
@@ -54,6 +57,10 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN,null);
 
         actionBar = getSupportActionBar();
 

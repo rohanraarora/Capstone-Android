@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -30,11 +31,14 @@ import com.forkthecode.capstone.rest.SpeakerCursorAdapter;
 import com.forkthecode.capstone.ui.EventDetailActivity;
 import com.forkthecode.capstone.utilities.DBUtils;
 import com.forkthecode.capstone.utilities.RecyclerViewItemClickListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SpeakerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public static final int SPEAKER_CURSOR_LOADER_ID = 2;
 
@@ -48,6 +52,13 @@ public class SpeakerFragment extends Fragment implements LoaderManager.LoaderCal
 
     public SpeakerFragment() {
         // Required empty public constructor
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
     }
 
     public static SpeakerFragment newInstance(@NonNull Event event){
@@ -70,6 +81,13 @@ public class SpeakerFragment extends Fragment implements LoaderManager.LoaderCal
                     public void onItemClick(View v, int position) {
                         mCursor.moveToPosition(position);
                         Speaker speaker = DBUtils.getSpeakerFromCursor(mCursor);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(speaker.getServerId()));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, speaker.getName());
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "speaker");
+                        mFirebaseAnalytics.logEvent("Open Speaker Profile", bundle);
+
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                         browserIntent.setData(Uri.parse(speaker.getProfileURL()));
                         try{

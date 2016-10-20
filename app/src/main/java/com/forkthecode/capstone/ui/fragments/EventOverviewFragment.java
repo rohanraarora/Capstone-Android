@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.forkthecode.capstone.R;
 import com.forkthecode.capstone.data.models.Event;
 import com.forkthecode.capstone.rest.Constants;
 import com.forkthecode.capstone.utilities.Util;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +28,9 @@ import java.util.Date;
  */
 
 public class EventOverviewFragment extends Fragment {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -33,6 +38,12 @@ public class EventOverviewFragment extends Fragment {
     private static Event mEvent;
 
     public EventOverviewFragment() {
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
     }
 
     /**
@@ -96,6 +107,13 @@ public class EventOverviewFragment extends Fragment {
     }
 
     private void onGetTicketsClicked(View view) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(mEvent.getServerId()));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mEvent.getTitle());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "event");
+        mFirebaseAnalytics.logEvent("Open Events Ticket Page", bundle);
+
         Intent browserIntent = new Intent(Intent.ACTION_VIEW);
         browserIntent.setData(Uri.parse(mEvent.getTitcketURL()));
         try{
@@ -107,9 +125,16 @@ public class EventOverviewFragment extends Fragment {
     }
 
     private void onVenueClicked() {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(mEvent.getServerId()));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mEvent.getTitle());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "event");
+        mFirebaseAnalytics.logEvent("Open Venue Page", bundle);
+
         double latitude = mEvent.getVenueLat();
         double longitude = mEvent.getVenueLong();
-        String geoString = "geo:" + latitude + "," + longitude + "?z=15";
+        String geoString = "geo:" + latitude + "," + longitude + "?z=18";
         Uri gmmIntentUri = Uri.parse(geoString);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
@@ -119,6 +144,12 @@ public class EventOverviewFragment extends Fragment {
     }
 
     private void onDurationClicked() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, String.valueOf(mEvent.getServerId()));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mEvent.getTitle());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "event");
+        mFirebaseAnalytics.logEvent("Add Event To Calendar", bundle);
+
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra(CalendarContract.Events.TITLE, mEvent.getTitle());
