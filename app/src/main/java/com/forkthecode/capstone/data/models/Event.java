@@ -138,5 +138,7 @@ public class Event implements Serializable{
         return System.currentTimeMillis() >= toTimestamp * 1000L;
     }
 
-
+    public boolean shouldShowGetTickets() {
+        return System.currentTimeMillis() < fromTimestamp * 1000L;
+    }
 }
