@@ -3,6 +3,7 @@ package com.forkthecode.capstone.network;
 import android.util.Log;
 
 import com.forkthecode.capstone.network.responses.ApiResponse;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.JsonSyntaxException;
 
 
@@ -44,6 +45,7 @@ public class NetworkDataManager<T extends ApiResponse> {
                 if (response.isSuccessful()) {
                     if (response.body().getError() != null && response.body().getError().length() > 0) {
                         listener.onFailure(SUCCESS_RESPONSE_CODE, response.body().getError());
+                        FirebaseCrash.log(response.body().getError());
                     } else {
                         listener.onSuccessResponse(response.body());
                     }
@@ -61,6 +63,7 @@ public class NetworkDataManager<T extends ApiResponse> {
                     listener.onFailure(NETWORK_FAILURE_ERROR_CODE, NETWORK_FAILURE_ERROR_MESSAGE);
                     Log.d(LOG_TAG,t.getMessage());
                 }
+                FirebaseCrash.report(new Exception(t.getMessage()));
             }
         });
     }
