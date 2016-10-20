@@ -45,8 +45,19 @@ public class OpenHelper extends SQLiteOpenHelper {
                 EventEntry.COLUMN_VENUE_LAT + " TEXT, " + EventEntry.COLUMN_VENUE_LONG + " TEXT, " +
                 EventEntry.COLUMN_COVER_IMAGE_LINK + " TEXT)";
 
+        final String SQL_CREATE_SPEAKER_TABLE = "CREATE TABLE " + SpeakerEntry.TABLE_NAME + " ("
+                + SpeakerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + SpeakerEntry.COLUMN_SERVER_ID + " INTEGER NOT NULL,"
+                + SpeakerEntry.COLUMN_EVENT_SERVER_ID + " INTEGER NOT NULL,"
+                + SpeakerEntry.COLUMN_NAME + " TEXT,"
+                + SpeakerEntry.COLUMN_PROFILE_URL + " TEXT,"
+                + SpeakerEntry.COLUMN_BIO + " TEXT,"
+                + SpeakerEntry.COLUMN_PROFILE_PIC_URL + " TEXT,"
+                + "UNIQUE (" + SpeakerEntry.COLUMN_SERVER_ID + ") ON CONFLICT REPLACE)";
+
         db.execSQL(SQL_CREATE_NEWS_TABLE);
         db.execSQL(SQL_CREATE_EVENT_TABLE);
+        db.execSQL(SQL_CREATE_SPEAKER_TABLE);
 
     }
 

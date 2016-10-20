@@ -14,6 +14,7 @@ import com.forkthecode.capstone.data.models.News;
 
 /**
  * Created by rohanarora on 19/10/16.
+ *
  */
 
 public class CapstoneProvider extends ContentProvider {
@@ -24,8 +25,7 @@ public class CapstoneProvider extends ContentProvider {
 
     static final int NEWS = 100;
     static final int EVENTS = 200;
-
-
+    static final int SPEAKERS = 300;
 
     static UriMatcher buildUriMatcher() {
 
@@ -35,6 +35,7 @@ public class CapstoneProvider extends ContentProvider {
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, Contract.PATH_NEWS, NEWS);
         matcher.addURI(authority, Contract.PATH_EVENTS, EVENTS);
+        matcher.addURI(authority, Contract.PATH_SPEAKERS, SPEAKERS);
 //        matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
 //        matcher.addURI(authority, WeatherContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
 //
@@ -61,6 +62,8 @@ public class CapstoneProvider extends ContentProvider {
                 return Contract.NewsEntry.CONTENT_TYPE;
             case EVENTS:
                 return Contract.EventEntry.CONTENT_TYPE;
+            case SPEAKERS:
+                return Contract.SpeakerEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -81,6 +84,11 @@ public class CapstoneProvider extends ContentProvider {
             }
             case EVENTS: {
                 retCursor = mOpenHelper.getReadableDatabase().query(Contract.EventEntry.TABLE_NAME,
+                        projection,selection,selectionArgs,null,null,sortOrder);
+                break;
+            }
+            case SPEAKERS: {
+                retCursor = mOpenHelper.getReadableDatabase().query(Contract.SpeakerEntry.TABLE_NAME,
                         projection,selection,selectionArgs,null,null,sortOrder);
                 break;
             }
@@ -115,6 +123,14 @@ public class CapstoneProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
+            case SPEAKERS: {
+                long _id = db.insert(Contract.SpeakerEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = Contract.SpeakerEntry.buildSpeakerUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -137,6 +153,10 @@ public class CapstoneProvider extends ContentProvider {
             case EVENTS:
                 rowsDeleted = db.delete(
                         Contract.EventEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case SPEAKERS:
+                rowsDeleted = db.delete(
+                        Contract.SpeakerEntry.TABLE_NAME, selection, selectionArgs);
                 break;
 
             default:
@@ -165,6 +185,10 @@ public class CapstoneProvider extends ContentProvider {
                 break;
             case EVENTS:
                 rowsUpdated = db.update(Contract.EventEntry.TABLE_NAME, values, selection,
+                        selectionArgs);
+                break;
+            case SPEAKERS:
+                rowsUpdated = db.update(Contract.SpeakerEntry.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
             default:
@@ -229,6 +253,30 @@ public class CapstoneProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnEventCount;
+            case SPEAKERS:
+                db.beginTransaction();
+                int returnSpeakerCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        try {
+                            long _id = db.insertOrThrow(Contract.SpeakerEntry.TABLE_NAME, null, value);
+                            if (_id != -1) {
+                                returnSpeakerCount++;
+                            }
+                        }
+                        catch (SQLiteConstraintException e){
+                            db.update(Contract.SpeakerEntry.TABLE_NAME,value,
+                                    Contract.SpeakerEntry.COLUMN_SERVER_ID + " = ?",
+                                    new String[]{value.getAsString(Contract.SpeakerEntry.COLUMN_SERVER_ID)});
+                        }
+
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnSpeakerCount;
             default:
                 return super.bulkInsert(uri, values);
         }

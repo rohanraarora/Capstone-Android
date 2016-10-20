@@ -47,4 +47,6 @@
     <string name="content_des_community_logo">Community Logo</string>
     <string name="title_activity_event_detail">EventDetail</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="placeholder_bio">Bio</string>
+    <string name="placeholder_name">Name</string>
 </resources>

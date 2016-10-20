@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.forkthecode.capstone.data.Contract;
 import com.forkthecode.capstone.data.models.Event;
 import com.forkthecode.capstone.data.models.News;
+import com.forkthecode.capstone.data.models.Speaker;
 
 /**
  * Created by rohanarora on 19/10/16.
@@ -72,5 +73,28 @@ public class DBUtils {
         event.setVenueLong(cursor.getDouble(cursor.getColumnIndex(Contract.EventEntry.COLUMN_VENUE_LONG)));
         event.setCoverImageURL(cursor.getString(cursor.getColumnIndex(Contract.EventEntry.COLUMN_COVER_IMAGE_LINK)));
         return event;
+    }
+
+    public static ContentValues cvFromSpeaker(@NonNull Speaker speaker){
+        Util.checkNotNull(speaker);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Contract.SpeakerEntry.COLUMN_SERVER_ID,speaker.getServerId());
+        contentValues.put(Contract.SpeakerEntry.COLUMN_EVENT_SERVER_ID,speaker.getEventId());
+        contentValues.put(Contract.SpeakerEntry.COLUMN_NAME,speaker.getName());
+        contentValues.put(Contract.SpeakerEntry.COLUMN_BIO,speaker.getBio());
+        contentValues.put(Contract.SpeakerEntry.COLUMN_PROFILE_URL,speaker.getProfileURL());
+        contentValues.put(Contract.SpeakerEntry.COLUMN_PROFILE_PIC_URL,speaker.getProfilePicURL());
+        return contentValues;
+    }
+
+    public static Speaker getSpeakerFromCursor(Cursor cursor) {
+        Speaker speaker = new Speaker();
+        speaker.setServerId(cursor.getLong(cursor.getColumnIndex(Contract.SpeakerEntry.COLUMN_SERVER_ID)));
+        speaker.setEventId(cursor.getLong(cursor.getColumnIndex(Contract.SpeakerEntry.COLUMN_EVENT_SERVER_ID)));
+        speaker.setBio(cursor.getString(cursor.getColumnIndex(Contract.SpeakerEntry.COLUMN_BIO)));
+        speaker.setName(cursor.getString(cursor.getColumnIndex(Contract.SpeakerEntry.COLUMN_NAME)));
+        speaker.setProfileURL(cursor.getString(cursor.getColumnIndex(Contract.SpeakerEntry.COLUMN_PROFILE_URL)));
+        speaker.setProfilePicURL(cursor.getString(cursor.getColumnIndex(Contract.SpeakerEntry.COLUMN_PROFILE_PIC_URL)));
+        return speaker;
     }
 }

@@ -12,6 +12,7 @@ import com.forkthecode.capstone.R;
 import com.forkthecode.capstone.data.Contract;
 import com.forkthecode.capstone.data.models.Event;
 import com.forkthecode.capstone.data.models.News;
+import com.forkthecode.capstone.data.models.Speaker;
 import com.forkthecode.capstone.network.responses.EventsResponse;
 import com.forkthecode.capstone.ui.fragments.EventsFragment;
 import com.forkthecode.capstone.ui.fragments.InfoFragment;
@@ -24,6 +25,7 @@ import com.forkthecode.capstone.utilities.DBUtils;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -124,8 +126,6 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
                     ContentValues newsValues = DBUtils.cvFromNews(news);
                     cVVector.add(newsValues);
                 }
-                int inserted = 0;
-                // add to database
                 if ( cVVector.size() > 0 ) {
                     ContentValues[] cvArray = new ContentValues[cVVector.size()];
                     cVVector.toArray(cvArray);
@@ -154,9 +154,19 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
                 for(Event event:events){
                     ContentValues contentValues = DBUtils.cvFromEvent(event);
                     cVVector.add(contentValues);
+                    ArrayList<Speaker> speakers = event.getSpeakers();
+                    Vector<ContentValues> speakerContentValuesVector = new Vector<>();
+                    for(Speaker speaker:speakers){
+                        speaker.setEventId(event.getServerId());
+                        ContentValues speakerContentValues = DBUtils.cvFromSpeaker(speaker);
+                        speakerContentValuesVector.add(speakerContentValues);
+                    }
+                    if(speakerContentValuesVector.size()>0){
+                        ContentValues[] speakerCVArray = new ContentValues[speakerContentValuesVector.size()];
+                        speakerContentValuesVector.toArray(speakerCVArray);
+                        getContentResolver().bulkInsert(Contract.SpeakerEntry.CONTENT_URI,speakerCVArray);
+                    }
                 }
-                int inserted = 0;
-                // add to database
                 if ( cVVector.size() > 0 ) {
                     ContentValues[] cvArray = new ContentValues[cVVector.size()];
                     cVVector.toArray(cvArray);

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.security.PublicKey;
+import java.util.ArrayList;
 
 /**
  * Created by rohanarora on 19/10/16.
@@ -41,6 +42,8 @@ public class Event implements Serializable{
 
     @SerializedName("cover_image_url")
     private String coverImageURL;
+
+    private ArrayList<Speaker> speakers;
 
     public Event(){
 
@@ -132,6 +135,14 @@ public class Event implements Serializable{
 
     public void setCoverImageURL(String coverImageURL) {
         this.coverImageURL = coverImageURL;
+    }
+
+    public ArrayList<Speaker> getSpeakers() {
+        return speakers;
+    }
+
+    public void setSpeakers(ArrayList<Speaker> speakers) {
+        this.speakers = speakers;
     }
 
     public boolean isPastEvent(){

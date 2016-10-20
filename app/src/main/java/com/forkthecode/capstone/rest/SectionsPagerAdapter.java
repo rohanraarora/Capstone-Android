@@ -4,7 +4,7 @@ package com.forkthecode.capstone.rest;
  * Created by rohanarora on 20/10/16.
  */
 
-import android.os.Bundle;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,10 +15,6 @@ import com.forkthecode.capstone.ui.fragments.SpeakerFragment;
 
 import java.util.HashMap;
 
-/**
- * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private static final int OVERVIEW_POSITION = 0;
@@ -46,7 +42,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 fragmentHashMap.put(position,eventOverviewFragment);
                 return eventOverviewFragment;
             case SPEAKER_POSITION:
-                return  SpeakerFragment.newInstance();
+                SpeakerFragment speakerFragment =  SpeakerFragment.newInstance(mEvent);
+                fragmentHashMap.put(position,speakerFragment);
+                return speakerFragment;
             default: return null;
         }
     }

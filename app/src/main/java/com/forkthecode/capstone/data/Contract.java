@@ -18,6 +18,7 @@ public class Contract {
 
     public static final String PATH_NEWS = "news";
     public static final String PATH_EVENTS = "events";
+    public static final String PATH_SPEAKERS = "speakers";
 
 
     public static final class NewsEntry implements BaseColumns  {
@@ -41,6 +42,30 @@ public class Contract {
         public static Uri buildNewsUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+    }
+
+    public static final class SpeakerEntry implements  BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_SPEAKERS).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EVENTS;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EVENTS;
+
+        public static final String TABLE_NAME = "speakers";
+        public static final String COLUMN_EVENT_SERVER_ID = "event_id";
+        public static final String COLUMN_SERVER_ID = "server_id";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_BIO = "bio";
+        public static final String COLUMN_PROFILE_URL = "profile_url";
+        public static final String COLUMN_PROFILE_PIC_URL = "profile_pic_url";
+
+        public static Uri buildSpeakerUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
     }
 
 
