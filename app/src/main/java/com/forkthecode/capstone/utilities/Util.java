@@ -39,6 +39,6 @@ public class Util {
     }
 
     public static String getCompleteImageUrl(String imageURL) {
-        return URLConstant.BASE_URL + imageURL;
+        return "https:" + imageURL;
     }
 }
