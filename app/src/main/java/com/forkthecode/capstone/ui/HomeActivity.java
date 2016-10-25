@@ -147,7 +147,7 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
 
             @Override
             public void onFailure(int code, String message) {
-                Toast.makeText(HomeActivity.this,"News Error: " + message,Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this,message,Toast.LENGTH_SHORT).show();
             }
 
 
@@ -189,7 +189,7 @@ public class HomeActivity extends AppCompatActivity implements OnTabSelectListen
 
             @Override
             public void onFailure(int code, String message) {
-                Toast.makeText(HomeActivity.this,"Events Error: " + message,Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this,message,Toast.LENGTH_SHORT).show();
             }
         };
         manager.execute(call,listener);
